@@ -2,6 +2,7 @@ services:
 
   openldap:
     image: osixia/openldap:1.5.0
+    restart: always
     container_name: openldap
     environment:
       - LDAP_ORGANISATION="MyCompany Inc."
@@ -11,6 +12,7 @@ services:
 
   phpldapadmin:
     image: osixia/phpldapadmin:0.9.0
+    restart: always
     container_name: phpldapadmin
     environment:
       - PHPLDAPADMIN_LDAP_HOSTS=openldap
@@ -21,6 +23,7 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.2
+    restart: always
     environment:
       KC_HTTP_RELATIVE_PATH: "/auth"
       KEYCLOAK_ADMIN: admin
@@ -64,6 +67,7 @@ services:
 
   keycloak-opa:
     image: openpolicyagent/opa:0.62.1
+    restart: always
     platform: linux/amd64
     command:
       - run
@@ -82,6 +86,7 @@ services:
 
   keycloak-provisioning:
     image: quay.io/adorsys/keycloak-config-cli:5.11.1-24.0.1
+    restart: always
     environment:
       KEYCLOAK_URL: http://keycloak:8080/auth
       KEYCLOAK_USER: admin
@@ -101,6 +106,7 @@ services:
 
   mail:
     image: maildev/maildev:2.1.0 #@sha256:57e0b96fefb5dfeda8b39fb04c666ee7eef7be899ac8ea0e4d983bb0ea64aaff
+    restart: always
     environment:
       MAILDEV_BASE_PATHNAME: "/mail"
     ports:
@@ -109,6 +115,7 @@ services:
 
   postgres:
     image: postgres:14
+    restart: always
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
