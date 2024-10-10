@@ -25,9 +25,7 @@ claims := payload if {
 	# hardcoded into the policy however it could also be loaded via data or
 	# an environment variable. Environment variables can be accessed using
 	# the `opa.runtime()` built-in function.
-	io.jwt.verify_rs256(bearer_token, "-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhAj9OCZd0XjzOIad2VbUPSMoVK1X8hdD2Ad+jUXCzhZJf0RaN6B+79AW5jSgceAgyAtLXiBayLlaqSjZM6oyti9gc2M2BXzoDKLye+Tgpftd72Zreb4HpwKGpVrJ3H3Ip5DNLSD4a1ovAJ6Sahjb8z34T8c1OCnf5j70Y7i9t3y/j076XIUU4vWpAhI9LRAOkSLqDUE5L/ZdPmwTgK91Dy1fxUQ4d02Ly4MTwV2+4OaEHhIfDSvakLBeg4jLGOSxLY0y38DocYzMXe0exJXkLxqHKMznpgGrbps0TPfSK0c3q2PxQLczCD3n63HxbN8U9FPyGeMrz59PPpkwIDAQAB
------END PUBLIC KEY-----")
+	io.jwt.verify_rs256(bearer_token, "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyHlybc7qW3DKk9YQdpzsO5MRNQhi8R/1ag1iSWfoCX2Qy2Ul4hqKtxNizOZgrwZ2zfjzl4tSvp3vln1gXnVIk59X1Vw/0mz5mJFC1wJaa3+mpErEzx5h4bKyce7b1lV5RRq3pKvRtVEZGNS9r77RTSD/mENE6i1b2hiD7gSO1FkGXYx3HYUm5Xjr1C9sRnn1zJWMlqrlnBH/+Le4BmtiXZQITX+WeXkG+Tz5Nlhci4O70OHcWR/adzf7811Kk9jHNMyxe6k9CbPQkbDffqv18vcVanCZs6S9kbuJokpYVduZnI/M7mtGublK/HpDq7rfD54ipVWvUsLmXJKYSIEtlwIDAQAB\n-----END PUBLIC KEY-----")
 
 	# This statement invokes the built-in function `io.jwt.decode` passing the
 	# parsed bearer_token as a parameter. The `io.jwt.decode` function returns an
