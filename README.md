@@ -1,7 +1,7 @@
 Keycloak Open Policy Integration Demo
 ----
 
-Example code for integrating Open Policy Agent with Keycloak presented at Keycloak Dev Day 2024.
+This project deploys **Keycloak**, **LDAP**, and **Open Policy Agent (OPA)** to demonstrate how to integrate these components for identity management and policy enforcement.
 
 [Slides](keycloak-devday-2024-flexible-authz-for-keycloak-with-openpolicyagent.pdf)
 
@@ -43,34 +43,84 @@ Once up, you can access Keycloak via http://localhost:8080/auth and login with `
 The demo contains a realm called `opademo` that is configured via `dev/config/realms/opademo.yaml`
 through [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli).
 
-## Users
+# Integrating LDAP in Keycloak and Syncing Users
 
-The example contains a few users to demonstrate various aspects.
+To integrate LDAP in Keycloak and synchronize users, follow these steps:
+1. **Go to User Federation**:
+   - In the **Realm** left menu, click on **User Federation**.
+   - Click on **Add LDAP provider** to configure the LDAP connection.
+2. **Configure LDAP Settings**:
+![](images/configuration-1.png)
+![](images/configuration-2.png)
+![](images/configuration-3.png)
 
-- Username: "tester" with Password: "test"
-- Username: "admin" with Password: "test"
-- Username: "guest" with Password: "test"
+3. **Add Mapper for Roles**:
+![](images/mapper-1.png)
+![](images/mapper-2.png)
+
+4. **Example LDIF File**:
+   - An example of how to structure your LDAP data for import can be found in the `users.ldif` file. This file defines user entries that can be imported into your LDAP server. 
 
 ## Clients
 
-The `opademo` realm contains a few client applications to demonstrate various access policies expressed
-with the REGO Policy language provided by OpenPolicyAgent. 
+# Adding Clients in Keycloak
+
+To create clients in Keycloak, follow these steps:
+
+1. **Access the Keycloak Administration Console**:
+   - Open your web browser and navigate to your Keycloak admin console (e.g., `http://localhost:8080/auth/admin`).
+   - Log in with your admin credentials.
+
+2. **Select Your Realm**:
+   - From the top left dropdown menu, select the realm where you want to create the client.
+
+3. **Navigate to Clients**:
+   - In the left menu, click on **Clients**.
+
+4. **Create a New Client**:
+   - Click on the **Create** button to add a new client.
+
+5. **Configure Client Settings**:
+   - Fill in the following fields:
+     - **Client ID**: Enter a unique identifier for the client (e.g., `my-app`).
+     - **Client Protocol**: Choose the protocol for the client, typically `openid-connect`.
+     - **Root URL**: Provide the root URL for your client application (optional).
+     - **Valid Redirect URIs**: Specify the URIs that are valid for redirecting after authentication.
+
+6. **Save the Client**:
+   - Click the **Save** button to create the client.
+
 
 ## OPA Access Policy
 
-The client access policies are defined in the file `dev/opa/policies/keycloak/realms/opademo/access/policy.rego`. 
+The client access policies are defined in the file `dev/opa/policies/`. 
+
 For this demo Open Policy Agent is configured to watch the file for changes and will automatically
 update the policies on change.
 
 To enable the policy check, go to `opademo Realm` -> `Authentication` -> `Required Actions` -> `Enable: OPA Policy Check`.
+
+![](images/opa-1.png)
+
+Additionally, go to `Realm settings` -> `Client Policies` -> `Create Client Profile` and `Create Client Policy`
+
+![](images/client-1.png)
+![](images/client-2.png)
+
 
 ## Realm configuration
 
 The realm with the clients, roles, groups and users are defined in the `dev/config/realms/opademo.yaml` 
 config file. 
 
-For the demo the `tester` user can be granted more access incrementally by uncommenting the role / group memeber ship mapping in the `opademo.yaml` file.
 
 To apply the changed realm configuration to the running Keycloak instance, just execute the following command:
 
 `docker restart dev-keycloak-provisioning-1`.
+
+# Custom Event Listener
+A Custom Event Listener has been included to capture all events in the "opademo" realm.
+
+You can check this by going to `Realm settings` -> `Events` 
+
+A new class has been added that listens to all events and, when a specific event is triggered, handles requests for protected resources within a client. This class queries OPA and checks the established policies.
