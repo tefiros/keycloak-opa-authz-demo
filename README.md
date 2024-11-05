@@ -15,7 +15,7 @@ mvn clean package -DskipTests
 
 ## Run with HTTP
 
-Start the docker compose setup with Keycloak, Open Policy Agent, Mail server.
+Start the docker compose setup with Keycloak, Open Policy Agent, Mail server and LDAP.
 
 ```
 docker compose -f dev/docker-compose.yml up
