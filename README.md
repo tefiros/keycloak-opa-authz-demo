@@ -61,9 +61,9 @@ To integrate LDAP in Keycloak and synchronize users, follow these steps:
 4. **Example LDIF File**:
    - An example of how to structure your LDAP data for import can be found in the `users.ldif` file. This file defines user entries that can be imported into your LDAP server. 
 
-## Clients
 
-# Adding Clients in Keycloak
+
+## Adding Clients in Keycloak
 
 To create clients in Keycloak, follow these steps:
 
@@ -91,7 +91,7 @@ To create clients in Keycloak, follow these steps:
    - Click the **Save** button to create the client.
 
 
-## OPA Access Policy
+## OPA for Authentication
 
 The client access policies are defined in the file `dev/opa/policies/`. 
 
@@ -123,4 +123,4 @@ A Custom Event Listener has been included to capture all events in the "opademo"
 
 You can check this by going to `Realm settings` -> `Events` 
 
-A new class has been added that listens to all events and, when a specific event is triggered, handles requests for protected resources within a client. This class queries OPA and checks the established policies.
+A new class has been added that listens to all events and, when a resource request is triggered, handles requests for protected resources within a client. This class queries OPA and checks the established policies.

@@ -7,18 +7,27 @@ import rego.v1
 # Default allow rule: deny all
 default allow = false
 
+is_maintainer if input.claims.preferred_username == "maintainer"
+is_get if input.request.method == "GET"
+is_entities if input.request.path == "/ngsi-ld/v1/entities"
+# is_Store if input.request.query.q == "storeName==\"Luxury Store\""
 
 allow if {
 	is_get
 	is_entities
 	claims.preferred_username == "maintainer"
-	is_Store
+#	is_Store
 }
 
-is_get if input.request.method == "GET"
-
-is_entities if input.request.path == "/ngsi-ld/v1/entities"
-is_Store if input.request.query.q == "storeName==\"Luxury Store\""
+dynamic_metadata = {
+    "query": {
+        "type": "Store",
+        "q": "storeName==\"Luxury Store\""
+    }
+} if {
+    allow
+	is_maintainer
+}
 
 claims := payload if {
 	# Verify the signature on the Bearer token. In this example the secret is
