@@ -15,6 +15,13 @@ allow if{
 	kc.hasRealmRole("admin")
 }
 
+allow if{
+	kc.isClient("6G-CHRONOS-API")
+	kc.isProtocol("openid-connect")
+	kc.isRealm("opademo")
+	kc.isGrantType("password")
+}
+
 # Access Policy: Onboard
 allow if {
 	kc.isRealm("opademo")

@@ -1,4 +1,4 @@
-package apisix
+package chronos
 
 
 import rego.v1
@@ -7,26 +7,10 @@ import rego.v1
 # Default allow rule: deny all
 default allow = false
 
-is_maintainer if input.claims.preferred_username == "maintainer"
-is_get if input.request.method == "GET"
-is_entities if input.request.path == "/ngsi-ld/v1/entities"
-is_Store if input.request.query.q == "storeName==\"Luxury Store\""
 
 allow if {
-	is_get
-	is_entities
-	claims.preferred_username == "maintainer"
-	is_Store
-}
-
-dynamic_metadata = {
-    "query": {
-        "type": "Store",
-        "q": "storeName==\"Luxury Store\""
-    }
-} if {
-    allow
-	is_maintainer
+	input.request.path == "/qod/v0/sessions"
+	claims.realm_access.roles == "trusted"
 }
 
 claims := payload if {
