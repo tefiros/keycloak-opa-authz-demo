@@ -22,6 +22,23 @@ allow if{
 	kc.isGrantType("password")
 }
 
+
+
+
+
+allow if{
+	kc.isClient("CCIPS")
+	kc.isProtocol("openid-connect")
+	kc.isRealm("opademo")
+	kc.isGrantType("password")
+}
+
+
+
+
+
+
+
 # Access Policy: Onboard
 allow if {
 	kc.isRealm("opademo")

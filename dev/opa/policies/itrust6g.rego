@@ -1,4 +1,4 @@
-package chronos
+package itrust6g
 
 
 import rego.v1
@@ -7,10 +7,14 @@ import rego.v1
 # Default allow rule: deny all
 default allow = false
 
-
+is_post if input.request.method == "POST"
+is_maintainer if claims.preferred_username == "maintainer"
+is_admin if claims.realm_access.roles[_] == "admin"
 allow if {
-	input.request.path == "/qod/v0/sessions"
-	claims.realm_access.roles[_] == "trusted"
+    is_post
+    is_maintainer
+    is_admin
+	input.request.path == "/ccips"
 }
 
 claims := payload if {
