@@ -27,3 +27,14 @@ jobs:
       # Build Maven project:
       - name: Build Maven project
         run: mvn clean package -DskipTests
+      
+      # Copy generated artifacts to upload directory:
+      - name: Copy generated artifacts to upload directory
+        run: mkdir staging && cp target/*.jar staging
+      
+      # Upload generated artifacts:
+      - name: Upload generated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Package
+          path: staging
