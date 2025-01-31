@@ -1,4 +1,4 @@
-package apisix
+package aerOS
 
 
 import rego.v1
@@ -8,25 +8,22 @@ import rego.v1
 default allow = false
 
 is_maintainer if input.claims.preferred_username == "maintainer"
+is_admin if claims.realm_access.roles[_] == "admin"
+is_org1 if claims.realm_access.roles[_] == "Org1"
+is_org2 if claims.realm_access.roles[_] == "Org2"
 is_get if input.request.method == "GET"
-is_entities if input.request.path == "/ngsi-ld/v1/entities"
-is_Store if input.request.query.q == "storeName==\"Luxury Store\""
+# is_Store if input.request.query.q == "storeName==\"Luxury Store\""
 
 allow if {
 	is_get
-	is_entities
-	claims.preferred_username == "maintainer"
-	is_Store
+	is_admin
 }
 
-dynamic_metadata = {
-    "query": {
-        "type": "Store",
-        "q": "storeName==\"Luxury Store\""
-    }
+headers = {
+		"Location": "/ngsi-ld/v1/entities?type=DataProduct&q=publisher==\"urn:User:janedoe\""
 } if {
     allow
-	is_maintainer
+	is_org1
 }
 
 claims := payload if {
