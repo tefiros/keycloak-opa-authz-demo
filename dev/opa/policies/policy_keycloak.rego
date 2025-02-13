@@ -26,12 +26,34 @@ allow if{
 
 
 
+
+
+
 allow if{
 	kc.isClient("CCIPS")
 	kc.isProtocol("openid-connect")
 	kc.isRealm("opademo")
 	kc.isGrantType("password")
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

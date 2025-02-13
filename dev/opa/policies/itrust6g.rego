@@ -20,7 +20,6 @@ allow if {
 	is_delete
     is_maintainer
     is_admin
-	input.request.path == "/ccips"
 }
 
 claims := payload if {
