@@ -47,21 +47,8 @@ allow if {
 	input.subject.username == "data_product_owner"
 }
 
-# Access Policy: ContextBroker
-allow if {
-	kc.isClient("ContextBroker")
-	kc.isRealm("opademo")
-	kc.isProtocol("openid-connect")
-	kc.isGrantType("password")
-  	kc.hasRealmRole("admin")
-}
 
-# Access Policy: Consume
-allow if {
-	kc.isClient("ContextBroker")
-	kc.isRealm("opademo")
-  	kc.hasRealmRole("admin")
-}
+
 
 
 
