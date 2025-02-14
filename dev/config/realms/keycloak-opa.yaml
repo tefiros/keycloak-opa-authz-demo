@@ -1,6 +1,6 @@
-realm: KckOpa
+realm: keycloak-opa
 enabled: true
-displayName: KckOpa
+displayName: keycloak-opa
 
 loginWithEmailAllowed: true
 resetPasswordAllowed: true
