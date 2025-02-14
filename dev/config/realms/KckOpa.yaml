@@ -1,0 +1,111 @@
+realm: KckOpa
+enabled: true
+displayName: KckOpa
+
+loginWithEmailAllowed: true
+resetPasswordAllowed: true
+sslRequired: $(env:SSL_REQUIRED:-EXTERNAL)
+
+loginTheme: keycloak
+accountTheme: keycloak.v3
+emailTheme: keycloak
+
+eventsListeners:
+  - "jboss-logging"
+  - "custom-event-listener"
+
+eventsEnabled: true
+
+#browserFlow: "browser opa"
+#directGrantFlow: "direct grant opa"
+
+authenticationFlows:
+  - alias: "opa-browser"
+    description: "OPA Browser Flow"
+    providerId: basic-flow
+    builtIn: false
+    topLevel: true
+    authenticationExecutions:
+      - flowAlias: "Login"
+        requirement: REQUIRED
+        authenticatorFlow: true
+      - authenticator: auth-opa-authz
+        requirement: REQUIRED
+        authenticatorConfig: "opa-browser-auth-default"
+
+  - alias: "Login"
+    description: "Sub-Flow to ask user for username an password"
+    providerId: basic-flow
+    topLevel: false
+    builtIn: false
+    authenticationExecutions:
+      - authenticator: auth-cookie
+        requirement: ALTERNATIVE
+      - authenticator: identity-provider-redirector
+        requirement: ALTERNATIVE
+      - flowAlias: "Identity Forms"
+        requirement: ALTERNATIVE
+        autheticatorFlow: true
+
+  - alias: "Identity Forms"
+    description: "Sub-Flow to ask user for username an password"
+    providerId: basic-flow
+    topLevel: false
+    builtIn: false
+    authenticationExecutions:
+      - authenticator: auth-username-password-form
+        requirement: REQUIRED
+      - flowAlias: "2FA Forms"
+        requirement: CONDITIONAL
+        authenticatorFlow: true
+
+  - alias: "2FA Forms"
+    description: "Sub-Flow to ask user for 2FA"
+    providerId: basic-flow
+    topLevel: false
+    builtIn: false
+    authenticationExecutions:
+      - authenticator: conditional-user-configured
+        requirement: REQUIRED
+      - authenticator: auth-otp-form
+        requirement: ALTERNATIVE
+      - authenticator: auth-recovery-authn-code-form
+        requirement: ALTERNATIVE
+
+#  - alias: "OPA: direct grant"
+#    description: "OpenID Connect Resource Owner Grant with OPA"
+#    providerId: "basic-flow"
+#    topLevel: true
+#    authenticationExecutions:
+#      - authenticator: "direct-grant-validate-username"
+#        requirement: "REQUIRED"
+#        priority: 10
+#      - authenticator: "direct-grant-validate-password"
+#        requirement: "REQUIRED"
+#        priority: 20
+#      - flowAlias: "OPA: Direct Grant - Conditional OTP"
+#        authenticatorFlow: true
+#        requirement: "CONDITIONAL"
+#        priority: 30
+#
+#  - alias: "OPA: Direct Grant - Conditional OTP"
+#    description: "Flow to determine if the OTP is required for the authentication with OPA"
+#    providerId: "basic-flow"
+#    topLevel: false
+#    authenticationExecutions:
+#      - authenticator: "conditional-user-configured"
+#        requirement: "REQUIRED"
+#        priority: 10
+#      - authenticator: "direct-grant-validate-otp"
+#        requirement: "REQUIRED"
+#        priority: 20
+
+authenticatorConfig:
+  - alias: "opa-browser-auth-default"
+    config:
+      opa-url: "http://keycloak-opa:8181/v1/data/iam/keycloak/allow"
+      opa-policy-path: "/keycloak/realms/{realm}/{action}/allow"
+      opa-context-attributes: "remoteAddress,protocol,grantType"
+      opa-user-attributes: "email,emailVerified"
+      opa-request-headers: "Authorization,Content-Type,Custom-Header"
+
