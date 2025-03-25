@@ -34,11 +34,6 @@ allow if{
 }
 
 
-
-
-
-
-
 # Access Policy: Onboard
 allow if {
 	kc.isRealm("opademo")
