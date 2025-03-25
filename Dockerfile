@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:26.0.7
+FROM quay.io/keycloak/keycloak:24.0.2
 
 
 COPY ./target/keycloak-opa.jar /opt/keycloak/providers/keycloak-opa.jar
