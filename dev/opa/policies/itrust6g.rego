@@ -11,10 +11,16 @@ is_post if input.request.method == "POST"
 is_delete if input.request.method == "DELETE"
 is_maintainer if claims.preferred_username == "maintainer"
 is_admin if claims.realm_access.roles[_] == "admin"
+is_token_valid if {
+    now := time.now_ns() / 1000000000
+    exp := claims.exp
+    now < exp
+}
+
 allow if {
-    is_post
     is_maintainer
     is_admin
+	is_token_valid
 	input.request.path == "/ccips"
 } {
 	is_delete
