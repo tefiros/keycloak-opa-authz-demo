@@ -10,20 +10,24 @@ default allow = false
 is_maintainer if input.claims.preferred_username == "maintainer"
 is_admin if claims.realm_access.roles[_] == "admin"
 is_org1 if claims.realm_access.roles[_] == "Org1"
-is_org2 if claims.realm_access.roles[_] == "Org2"
 is_get if input.request.method == "GET"
-# is_Store if input.request.query.q == "storeName==\"Luxury Store\""
+is_Org1Data if input.request.query.q == "publisher==\"urn:User:janedoe\""
+is_Org2Data if input.request.query.q == "publisher==\"urn:User:johndoe\""
 
 allow if {
 	is_get
-	is_admin
+	is_Org1Data
+	is_org1
 }
 
-headers = {
-		"Location": "/ngsi-ld/v1/entities?type=DataProduct&q=publisher==\"urn:User:janedoe\""
-} if {
-    allow
-	is_org1
+
+
+allow if {
+  is_Org1Data
+  is_org1
+} {
+  is_Org2Data
+  is_org1
 }
 
 claims := payload if {
