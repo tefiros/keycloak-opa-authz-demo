@@ -68,20 +68,38 @@ public class CustomEventListenerProvider
                 sendUserData(user);
                 checkAccess(createAccessDecisionContext(user));
             }
+            if (EventType.LOGIN.equals(event.getType())) {
+                event.getDetails().forEach((key, value) -> log.debugf("%s : %s", key, value));
+                log.debugf("OPA: LOGIN");
+                RealmModel realm = this.model.getRealm(event.getRealmId());
+                UserModel user = this.session.users().getUserById(realm, event.getUserId());
+                sendUserData(user);
+                checkAccess(createAccessDecisionContext(user));
+            }
                 
         } catch (ClientPolicyException e){
             log.debugf("Access not authorized...");
             RealmModel realm = this.model.getRealm(event.getRealmId());
             UserModel user = this.session.users().getUserById(realm, event.getUserId());
             EventBuilder eventBuilder = new EventBuilder(realm, session);
-            eventBuilder.user(user)
-                        .detail("error", "permission_token_error")
-                        .event(EventType.PERMISSION_TOKEN_ERROR)
-                        .detail("realmId", realm.getId())
-                        .detail("userId", user.getId())
-                        .detail("username", user.getUsername())
-                        .error("Access denied");
-            
+            if (EventType.PERMISSION_TOKEN.equals(event.getType())) {
+                eventBuilder.user(user)
+                            .detail("error", "permission_token_error")
+                            .event(EventType.PERMISSION_TOKEN_ERROR)
+                            .detail("realmId", realm.getId())
+                            .detail("userId", user.getId())
+                            .detail("username", user.getUsername())
+                            .error("Access denied");
+            }
+            if (EventType.LOGIN.equals(event.getType())) {
+                eventBuilder.user(user)
+                            .detail("error", "access_denied")
+                            .event(EventType.LOGIN_ERROR)
+                            .detail("realmId", realm.getId())
+                            .detail("userId", user.getId())
+                            .detail("username", user.getUsername())
+                            .error("Access denied");
+            }
             tx.addEvent(event);
             
         }
@@ -89,7 +107,7 @@ public class CustomEventListenerProvider
     }
     
     public void execute(Event event){
-        throw new WebApplicationException("OPA Access Check failed", Response.Status.FORBIDDEN);
+        throw new WebApplicationException("Access Denied", Response.Status.FORBIDDEN);
     }
 
     public void checkAccess(AccessDecisionContext decisionContext) throws ClientPolicyException {

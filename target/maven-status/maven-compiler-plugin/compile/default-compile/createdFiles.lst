@@ -27,8 +27,8 @@ com/thomasdarimont/keycloak/opa/checkaccess/OpaCheckAccessClientPolicyEnforcer.c
 com/thomasdarimont/keycloak/opa/config/MapConfig.class
 com/thomasdarimont/keycloak/opa/config/ConfigWrapper$MissingKeyException.class
 com/thomasdarimont/keycloak/opa/client/OpaClient.class
-com/thomasdarimont/keycloak/opa/checkaccess/OpaAccessPolicyProviderFactory.class
 com/thomasdarimont/keycloak/opa/checkaccess/CustomEventListenerProvider.class
+com/thomasdarimont/keycloak/opa/checkaccess/OpaAccessPolicyProviderFactory.class
 com/thomasdarimont/keycloak/opa/client/OpaSubject.class
 com/thomasdarimont/keycloak/opa/config/CompositeConfig.class
 META-INF/services/org.keycloak.services.clientpolicy.executor.ClientPolicyExecutorProviderFactory
@@ -36,8 +36,8 @@ com/thomasdarimont/keycloak/opa/config/AuthenticatorConfig.class
 com/thomasdarimont/keycloak/opa/checkaccess/OpaAccessPolicyProvider.class
 com/thomasdarimont/keycloak/opa/checkaccess/CustomEventListenerProviderFactory.class
 com/thomasdarimont/keycloak/opa/client/OpaPolicyQuery$OpaPolicyQueryBuilder.class
-com/thomasdarimont/keycloak/opa/authzservices/OpaPolicyRepresentation.class
 com/thomasdarimont/keycloak/opa/checkaccess/OpaAccessPolicyProvider$Option.class
+com/thomasdarimont/keycloak/opa/authzservices/OpaPolicyRepresentation.class
 com/thomasdarimont/keycloak/opa/checkaccess/OpaCheckAccessRequiredActionProvider$Factory.class
 META-INF/services/org.keycloak.authentication.AuthenticatorFactory
 com/thomasdarimont/keycloak/opa/config/ConfigWrapper.class
