@@ -91,23 +91,6 @@ To create clients in Keycloak, follow these steps:
    - Click the **Save** button to create the client.
 
 
-## OPA for Authentication
-
-The client access policies are defined in the file `dev/opa/policies/`. 
-
-For this demo Open Policy Agent is configured to watch the file for changes and will automatically
-update the policies on change.
-
-To enable the policy check, go to `opademo Realm` -> `Authentication` -> `Required Actions` -> `Enable: OPA Policy Check`.
-
-![](images/opa-1.png)
-
-Additionally, go to `Realm settings` -> `Client Policies` -> `Create Client Profile` and `Create Client Policy`
-
-![](images/client-1.png)
-![](images/client-2.png)
-
-
 ## Realm configuration
 
 The realm with the clients, roles, groups and users are defined in the `dev/config/realms/opademo.yaml` 
@@ -123,4 +106,4 @@ A Custom Event Listener has been included to capture all events in the "opademo"
 
 You can check this by going to `Realm settings` -> `Events` 
 
-A new class has been added that listens to all events and, when a resource request is triggered, handles requests for protected resources within a client. This class queries OPA and checks the established policies.
+A new class has been added that listens for all events, when a resource request or a new log in is triggered. This class queries OPA and checks the established policies.
